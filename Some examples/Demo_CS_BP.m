@@ -8,13 +8,13 @@ K = 10;%信号x的稀疏度
 Index_K = randperm(N);  
 x = zeros(N,1);  
 % x(Index_K(1:K)) = 5*randn(K,1);%x为K稀疏的，且位置是随机的  
-x(Index_K(1:K)) = 1;
+x(Index_K(1:K)) = 1;%生成随机的一维信号x
 Psi = eye(N);%x本身是稀疏的，定义稀疏矩阵为单位阵x=Psi*theta  
 Phi = randn(M,N);%测量矩阵为高斯矩阵  
 A = Phi * Psi;%传感矩阵  
 y = Phi * x;%得到观测向量y  
 %% 恢复重构信号x  
-tic  
+tic
 theta = BP_linprog(y,A);  
 x_r = Psi * theta;% x=Psi * theta  
 toc  

@@ -16,13 +16,17 @@ title('原始灰度图像');
 bsize = 8;
 imcols = im2col(im2double(imgrey), [bsize, bsize], 'distinct');
 
-codebook = dctmtx(bsize ^ 2);                   % DCT字典矩阵
+codebook = dctmtx(bsize ^ 2);% DCT字典矩阵，经典教程里的Psi，用作正交变换基
 
+M = 64;%观测值个数，次数，观测向量长度
+N = 64;%信号x的长度
+Phi = randn(M,N);%测量矩阵为高斯矩阵
+A = Phi * codebook;
 % 稀疏求解，需要对imcols的行进行遍历
 cols = size(imcols, 2);
 sparse = zeros(size(imcols));
 for i = 1 : cols
-    sparse(:, i) = BP_linprog(imcols(:, i), codebook);
+    sparse(:, i) = BP_linprog(Phi * imcols(:, i), A);
 end
 
 % 图像重建
